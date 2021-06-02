@@ -14,7 +14,7 @@ COPY telegram /bin/telegram
 
 # Compile and install monit
 RUN \
-    apk add --update gcc musl-dev make bash python3 curl libressl-dev file zlib-dev && \
+    apk add --update gcc musl-dev make bash python3 curl libressl-dev file zlib-dev ca-certificates && \
     mkdir -p /opt/src; cd /opt/src && \
     wget -qO- ${MONIT_URL}/monit-${MONIT_VERSION}.tar.gz | tar xz && \
     cd /opt/src/monit-${MONIT_VERSION} && \
