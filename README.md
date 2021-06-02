@@ -1,6 +1,12 @@
+
+[![Build Status](https://img.shields.io/docker/cloud/build/emergn/monit)](https://hub.docker.com/r/emergn/monit)
+[![Docker Automated build](https://img.shields.io/docker/cloud/automated/emergn/monit)](https://hub.docker.com/r/emergn/monit)
+[![Docker Image Size](https://img.shields.io/docker/image-size/emergn/monit/latest)](https://hub.docker.com/r/emergn/monit)
+
+
 # Monit - Docker/Kubernetes - UNIX Systems Management
 
-Run Monit inside docker ( )
+Run Monit inside Docker. **"Monit. Barking at daemons"**
 
 [![Monit](https://mmonit.com/monit/img/logo.png)](https://mmonit.com/monit/)
 
@@ -9,7 +15,7 @@ Run Monit inside docker ( )
 ## Supported architectures
 
 - amd64
-- arm32v6 (Raspberry Pi) [diogopms/monit-docker-kubernetes:arm32v6-latest](https://hub.docker.com/r/diogopms/monit-docker-kubernetes/tags?page=1&name=arm)
+- [arm32v6 (Raspberry Pi)](https://hub.docker.com/r/diogopms/monit-docker-kubernetes/tags?page=1&name=arm)
 
 ## Docker setup
 
@@ -24,8 +30,16 @@ Docker documentation: https://docs.docker.com/
 
 ## ENV VARS
 
+
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+
+
 | ENVs            	| Description                                              	|
 |-----------------	|----------------------------------------------------------	|
+| TELEGRAM_BOT_TOKEN| Token for Telegram Bot messaging                         	|
+| TELEGRAM_CHAT_ID  | Telegram chat id to send messages to                      |
+| SLACK_URL       	| Webhook url for slack notifications (required for slack) 	|
 | SLACK_URL       	| Webhook url for slack notifications (required for slack) 	|
 | PUSH_OVER_TOKEN 	| Push over api token (required for pushover)              	|
 | PUSH_OVER_USER  	| Push over api user (requiredfor pushover)                	|
@@ -33,30 +47,30 @@ Docker documentation: https://docs.docker.com/
 
 ### Docker Hub image
 
-- pull docker image from docker hub: `docker pull diogopms/monit-docker-kubernetes`
-- start monit: `docker run -ti -p 2812:2812 -v $(pwd)/monitrc:/etc/monitrc diogopms/monit-docker-kubernetes`
+- pull docker image from docker hub: `docker pull emergn/monit`
+- start monit: `docker run -ti -p 2812:2812 -v $(pwd)/monitrc:/etc/monitrc emergn/monit`
 - create a docker container:
 
 ```
-#Normal mode (support slack and pushover)
+#Normal mode (with telegram messaging)
 docker run -it \
   -p 2812:2812 \
   -v $(pwd)/monitrc:/etc/monitrc \
-  -e "SLACK_URL=<SLACK_URL>" \
-  -e "PUSH_OVER_TOKEN=<PUSH_OVER_TOKEN>" \
-  -e "PUSH_OVER_USER=<PUSH_OVER_USER>" \
-  diogopms/monit-docker-kubernetes
+  -e "TELEGRAM_BOT_TOKEN=187255489:AAKllsbl22h-x8kkdsgokgsyJJLfhjdKJHY" \
+  -e "TELEGRAM_CHAT_ID=882675873" \
+  emergn/monit
 
 #Debug mode
 docker run -it \
   -p 2812:2812 \
   -v $(pwd)/monitrc:/etc/monitrc \
-  -e "SLACK_URL=<SLACK_URL>" \
-  -e "PUSH_OVER_TOKEN=<PUSH_OVER_TOKEN>" \
-  -e "PUSH_OVER_USER=<PUSH_OVER_USER>" \
+  -e "TELEGRAM_BOT_TOKEN=187255489:AAKllsbl22h-x8kkdsgokgsyJJLfhjdKJHY" \
+  -e "TELEGRAM_CHAT_ID=882675873" \
   -e "DEBUG=1" \
-  diogopms/monit-docker-kubernetes
+  emergn/monit
 ```
+*TELEGRAM_BOT_TOKEN* and *TELEGRAM_CHAT_ID* are fakes here, of course ;-)
+
 
 ### Example monitrc (Slack)
 

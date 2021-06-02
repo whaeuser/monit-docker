@@ -1,15 +1,16 @@
 FROM alpine:3.13.5
 
-LABEL maintainer="Diogo Serrano <info@diogoserrano.com>"
+LABEL maintainer="Dmitrijs Zaharovs <dima@zaharov.info>"
 
 # monit environment variables
-ENV MONIT_VERSION=5.26.0 \
+ENV MONIT_VERSION=5.28.0 \
     MONIT_HOME=/opt/monit \
     MONIT_URL=https://mmonit.com/monit/dist \
     PATH=$PATH:/opt/monit/bin
 
 COPY slack /bin/slack
 COPY pushover /bin/pushover
+COPY telegram /bin/telegram
 
 # Compile and install monit
 RUN \
