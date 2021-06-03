@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ -z "$1" || -z "$2" || -z "$3" || -z "$4" || -z "$5" || -z "$6" || -z "$7" ]]; then
+  echo "Required credentials: MSSQL_HOST, MSSQL_DB, MSSQL_USER, MSSQL_PASS, MSSQL_AUTH_TYPE, MSSQL_QUERY and MSSQL_CHECK_REGEXP as script arguments"
+  echo "e.g. ./checkmssql db.example.com mydb sqluser sqlpassword '-G' 'select getdate()' '[0-9]{4}\-[0-9]{2}\-[0-9]{2}'"
+  exit 1
+fi
+
+export MSSQL_HOST="$1"
+export MSSQL_DB="$2"
+export MSSQL_USER="$3"
+export MSSQL_PASS="$4"
+export MSSQL_AUTH_TYPE="$5"
+export MSSQL_QUERY="$6"
+export MSSQL_CHECK_REGEXP="$7"
+
+/opt/mssql-tools/bin/sqlcmd -S $MSSQL_HOST -d $MSSQL_DB -U $MSSQL_USER -P $MSSQL_PASS $MSSQL_AUTH_TYPE -Q "$MSSQL_QUERY" | egrep -o "$MSSQL_CHECK_REGEXP"
+
+#
+# The command returns "0" if MSSQL_CHECK_REGEXP matches the output, "1" - otherwise.
+#
