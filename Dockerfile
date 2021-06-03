@@ -12,6 +12,7 @@ COPY slack /bin/slack
 COPY pushover /bin/pushover
 COPY telegram /bin/telegram
 COPY checkmssql /bin/checkmssql
+COPY checkmssqlad /bin/checkmssqlad
 
 # Support for MSSQL requests: Installing mssql-tools #########
 ARG MSSODBCSQL_VERSION=17.7.2.1-1
