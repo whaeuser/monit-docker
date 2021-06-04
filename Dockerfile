@@ -1,4 +1,5 @@
-FROM alpine:3.13.5
+# Using "Big" base image for Docker-in-Docker commands:
+FROM ubuntu:bionic-20210512
 
 LABEL maintainer="Dmitrijs Zaharovs <dima@zaharov.info>"
 
@@ -14,38 +15,26 @@ COPY telegram /bin/telegram
 COPY checkmssql /bin/checkmssql
 COPY checkmssqlad /bin/checkmssqlad
 
-# Support for MSSQL requests: Installing mssql-tools #########
-ARG MSSODBCSQL_VERSION=17.7.2.1-1
-ARG MSSQLTOOLS_VERSION=17.7.1.1-1
+RUN apt-get -y update
+RUN apt-get -y install software-properties-common
+RUN apt-get -y install wget curl
 
-USER root
-
-RUN set -x \
-  && echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories \
-  && apk update \
-  && apk add --update curl \
-   && tempDir="$(mktemp -d)" \
-  && chown nobody:nobody $tempDir \
-  && cd $tempDir \
-  && wget "https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_${MSSODBCSQL_VERSION}_amd64.apk" \
-  && wget "https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_${MSSQLTOOLS_VERSION}_amd64.apk" \
-  && apk add --allow-untrusted msodbcsql17_${MSSODBCSQL_VERSION}_amd64.apk \
-  && apk add --allow-untrusted mssql-tools_${MSSQLTOOLS_VERSION}_amd64.apk \
-  && rm -rf $tempDir \
-  && rm -rf /var/cache/apk/*
-#############################################################
-
-
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+RUN apt-get update
 # Compile and install monit
 RUN \
-    apk add --update gcc musl-dev make bash python3 curl libressl-dev file zlib-dev ca-certificates && \
+    apt-get -y install gcc musl-dev make bash python3 curl libssl-dev file zlib1g-dev ca-certificates && \
     mkdir -p /opt/src; cd /opt/src && \
     wget -qO- ${MONIT_URL}/monit-${MONIT_VERSION}.tar.gz | tar xz && \
     cd /opt/src/monit-${MONIT_VERSION} && \
     ./configure --prefix=${MONIT_HOME} --without-pam && \
-    make && make install && \
-    apk del gcc musl-dev make file zlib-dev && \
-    rm -rf /var/cache/apk/* /opt/src
+    make && make install
+
+#
+# Cannot build-in "mssql-tools". We'll use it from the Docker-in-Docker container:
+#
+RUN apt-get -y install docker.io
+#
 
 EXPOSE 2812
 
