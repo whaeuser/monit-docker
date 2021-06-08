@@ -27,4 +27,4 @@ export MSSQL_CHECK_REGEXP="$6"
 #echo MSSQL_QUERY=$MSSQL_QUERY
 #echo MSSQL_CHECK_REGEXP=$MSSQL_CHECK_REGEXP
 
-docker run -i -v /var/run/docker.sock:/var/run/docker.sock emergn/mssql-tools -S $MSSQL_HOST -d $MSSQL_DB -U $MSSQL_USER -P $MSSQL_PASS -Q "$MSSQL_QUERY" | egrep -o "$MSSQL_CHECK_REGEXP"
+docker run -i -v /var/run/docker.sock:/var/run/docker.sock emergn/mssql-tools -S $MSSQL_HOST -d $MSSQL_DB -U $MSSQL_USER -P $MSSQL_PASS -Q "$MSSQL_QUERY" | sed -z 's/\n/ /g' | egrep -o "$MSSQL_CHECK_REGEXP"
