@@ -12,6 +12,7 @@ ENV MONIT_VERSION=5.28.0 \
 COPY slack /bin/slack
 COPY pushover /bin/pushover
 COPY telegram /bin/telegram
+COPY teams /bin/teams
 COPY checkmssql /bin/checkmssql
 COPY checkmssqlad /bin/checkmssqlad
 
@@ -31,7 +32,7 @@ RUN \
     make && make install
 
 #
-# Cannot build-in "mssql-tools". We'll use it from the Docker-in-Docker container:
+# Cannot build-in "mssql-tools". We'll use it with "Docker-in-Docker" approach:
 #
 RUN apt-get -y install docker.io
 #
