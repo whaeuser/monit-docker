@@ -31,14 +31,11 @@ Docker documentation: https://docs.docker.com/
 ## ENV VARS
 
 
-TELEGRAM_BOT_TOKEN
-TELEGRAM_CHAT_ID
-
-
 | ENVs            	| Description                                              	|
 |-----------------	|----------------------------------------------------------	|
 | TELEGRAM_BOT_TOKEN| Token for Telegram Bot messaging                         	|
 | TELEGRAM_CHAT_ID  | Telegram chat id to send messages to                      |
+| TEAMS_WEBHOOK_URL | MS Teams webhook url                                      |
 | SLACK_URL       	| Webhook url for slack notifications (required for slack) 	|
 | SLACK_URL       	| Webhook url for slack notifications (required for slack) 	|
 | PUSH_OVER_TOKEN 	| Push over api token (required for pushover)              	|
@@ -71,6 +68,24 @@ docker run -it \
 ```
 *TELEGRAM_BOT_TOKEN* and *TELEGRAM_CHAT_ID* are fakes here, of course ;-)
 
+### Example monitrc (Teams and Telegram)
+
+```
+set daemon 20
+set log syslog
+# Web interface
+# set httpd port 2812 and allow admin:monit
+
+check host www.google.com with address www.google.com
+  if failed
+      port 443 protocol https
+      request /
+      status = 200
+      for 2 cycles
+  then exec "/bin/bash -c 'teams ALERT! Google is not responding! && telegram ALERT! This is the end of the world!'" repeat every 2 cycles
+EOF
+```
+
 
 ### Example monitrc (Slack)
 
@@ -91,31 +106,14 @@ check host www.google.com with address www.google.com
 EOF
 ```
 
-### Example monitrc (Pushover)
 
-```
-set daemon 20
-set log syslog
-# Web interface
-# set httpd port 2812 and allow admin:monit
-
-check host www.google.com with address www.google.com
-  if failed
-      port 443 protocol https
-      request /
-      status = 200
-      for 2 cycles
-  then exec "/bin/pushover"
-    else if succeeded then exec "/bin/pushover"
-EOF
-```
 
 ### Supported notifications
 
+- [Telegram](https://core.telegram.org/bots/api)
+- [MS Teams](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using)
 - [Slack](https://www.slack.com)
 - [Pushover](https://pushover.net)
-
-### Kubernetes
 
 ### Troubleshooting
 
