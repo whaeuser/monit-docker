@@ -1,0 +1,23 @@
+#!/bin/sh
+DESCRIPTION=$MONIT_DESCRIPTION
+SERVICE=$MONIT_SERVICE
+HOST=$MONIT_HOST
+
+PAYLOAD="$SERVICE$DESCRIPTION"
+
+if [[ -z "${BROKER}" || -z "${BROKER_USER}" || -z "${BROKER_PASSWORD}" ]]; then
+  echo "Required credentials <BROKER_USER|BROKER_PASSWORD|BROKER"
+  exit 1
+fi
+
+if [ -z "${TOPIC}"  ]; then
+  echo "Topic missing set default Topic monit/ "
+  TOPIC="monit"
+fi
+
+if [ -z "${CLIENT}"  ]; then
+  echo "Client missing set default client "
+  CLIENT="monit"
+fi
+
+/usr/bin/mosquitto_pub -i "$CLIENT" -d  -h "$BROKER" -m "$PAYLOAD"  -t "$TOPIC"
