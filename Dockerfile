@@ -13,8 +13,6 @@ COPY slack /bin/slack
 COPY pushover /bin/pushover
 COPY telegram /bin/telegram
 COPY teams /bin/teams
-COPY checkmssql /bin/checkmssql
-COPY checkmssqlad /bin/checkmssqlad
 COPY mqtt /bin/mqtt
 
 RUN apt-get -y update
@@ -31,12 +29,6 @@ RUN \
     cd /opt/src/monit-${MONIT_VERSION} && \
     ./configure --prefix=${MONIT_HOME} --without-pam && \
     make && make install
-
-#
-# Cannot build-in "mssql-tools". We'll use it with "Docker-in-Docker" approach:
-#
-RUN apt-get -y install docker.io
-#
 
 EXPOSE 2812
 
