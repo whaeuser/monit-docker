@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   monit:
-    image: whaeuser/monit-docker
+    image: monit-docker:staging
     container_name: monit
     environment:
       - PUID=1000
