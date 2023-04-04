@@ -25,7 +25,9 @@ Docker documentation: https://docs.docker.com/
 
 ### Build-in docker image
 
-- build docker image `docker build -t monit .`
+
+
+- build podman image `podman build -t monit .`
 - start monit: `docker run -ti -p 2812:2812 -v $(pwd)/monitrc:/etc/monitrc monit`
 
 ## ENV VARS
@@ -41,6 +43,8 @@ Docker documentation: https://docs.docker.com/
 | PUSH_OVER_TOKEN 	| Push over api token (required for pushover)              	|
 | PUSH_OVER_USER  	| Push over api user (requiredfor pushover)                	|
 | DEBUG           	| If set with 1 it will put monit in verbose mode          	|
+| BROKER           	| MQTT Broker URL                                         	|
+| TOPIC           	| Send to topic                                           	|
 
 ### Docker Hub image
 
@@ -49,24 +53,6 @@ Docker documentation: https://docs.docker.com/
 - create a docker container:
 
 ```
-#Normal mode (with telegram messaging)
-docker run -it \
-  -p 2812:2812 \
-  -v $(pwd)/monitrc:/etc/monitrc \
-  -e "TELEGRAM_BOT_TOKEN=187255489:AAKllsbl22h-x8kkdsgokgsyJJLfhjdKJHY" \
-  -e "TELEGRAM_CHAT_ID=882675873" \
-  emergn/monit
-
-#Debug mode
-docker run -it \
-  -p 2812:2812 \
-  -v $(pwd)/monitrc:/etc/monitrc \
-  -e "TELEGRAM_BOT_TOKEN=187255489:AAKllsbl22h-x8kkdsgokgsyJJLfhjdKJHY" \
-  -e "TELEGRAM_CHAT_ID=882675873" \
-  -e "DEBUG=1" \
-  emergn/monit
-```
-*TELEGRAM_BOT_TOKEN* and *TELEGRAM_CHAT_ID* are fakes here, of course ;-)
 
 ### Example monitrc (Teams and Telegram)
 
