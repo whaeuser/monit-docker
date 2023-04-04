@@ -1,10 +1,10 @@
 # Using "Big" base image for Docker-in-Docker commands:
 FROM ubuntu:bionic-20210512
 
-LABEL maintainer="Dmitrijs Zaharovs <dima@zaharov.info>"
+LABEL maintainer="Matthias Weyerhaeuser <public@weyerhaeuser.de>"
 
 # monit environment variables
-ENV MONIT_VERSION=5.28.0 \
+ENV MONIT_VERSION=5.33.0 \
     MONIT_HOME=/opt/monit \
     MONIT_URL=https://mmonit.com/monit/dist \
     PATH=$PATH:/opt/monit/bin
@@ -15,6 +15,7 @@ COPY telegram /bin/telegram
 COPY teams /bin/teams
 COPY checkmssql /bin/checkmssql
 COPY checkmssqlad /bin/checkmssqlad
+COPY mqtt /bin/mqtt
 
 RUN apt-get -y update
 RUN apt-get -y install software-properties-common
