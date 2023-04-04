@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   monit:
-    image: diogopms/monit-docker-kubernetes:latest
+    image: whaeuser/monit-docker
     container_name: monit
     environment:
       - PUID=1000
